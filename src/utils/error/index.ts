@@ -1,0 +1,1 @@
+import {errorData, errorMessages} from './errorMessages';
