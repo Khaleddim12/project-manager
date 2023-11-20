@@ -1,6 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUserByCreds = exports.createUser = void 0;
+exports.getUserBySlug = exports.getUserById = exports.getUserByCondition = exports.deleteUser = exports.findUserByCreds = exports.createUser = void 0;
 const auth_services_1 = require("./auth.services");
 Object.defineProperty(exports, "createUser", { enumerable: true, get: function () { return auth_services_1.createUser; } });
 Object.defineProperty(exports, "findUserByCreds", { enumerable: true, get: function () { return auth_services_1.findUserByCreds; } });
+const user_services_1 = require("./user.services");
+Object.defineProperty(exports, "deleteUser", { enumerable: true, get: function () { return user_services_1.deleteUser; } });
+Object.defineProperty(exports, "getUserByCondition", { enumerable: true, get: function () { return user_services_1.getUserByCondition; } });
+Object.defineProperty(exports, "getUserById", { enumerable: true, get: function () { return user_services_1.getUserById; } });
+Object.defineProperty(exports, "getUserBySlug", { enumerable: true, get: function () { return user_services_1.getUserBySlug; } });

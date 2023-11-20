@@ -1,3 +1,3 @@
-import {authRouter} from './user'
+import {authRouter,userRouter} from './user'
 
-export { authRouter };
+export { authRouter,userRouter };

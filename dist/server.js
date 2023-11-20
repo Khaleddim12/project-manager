@@ -13,6 +13,8 @@ const database_1 = require("./config/database");
 const routes_1 = require("./routes");
 // PATH
 const path_1 = __importDefault(require("path"));
+//Error Handler
+const middlewares_1 = require("./middlewares");
 const app = (0, express_1.default)();
 // Server
 const httpServer = require("http").Server(app);
@@ -26,6 +28,8 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 // Routes
 app.use("/api", routes_1.router);
+//use error handler
+app.use(middlewares_1.error);
 // Listen
 const PORT = process.env.PORT || 5000;
 const server = httpServer.listen(PORT, () => {

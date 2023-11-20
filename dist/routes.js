@@ -5,7 +5,8 @@ const express_1 = require("express");
 // Routers
 const routes_1 = require("./routes/");
 // Middlewares
-//import { authenticate } from "./middlewares";
+const middlewares_1 = require("./middlewares");
 const router = (0, express_1.Router)();
 exports.router = router;
 router.use("/auth", routes_1.authRouter);
+router.use("/user", middlewares_1.authenticate, routes_1.userRouter);

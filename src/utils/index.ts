@@ -1,3 +1,3 @@
-import {ErrorResponse} from './error/errorResponse'
+import {ErrorResponse, errorData, errorMessages} from './error/'
 
-export {ErrorResponse}
+export {ErrorResponse, errorData, errorMessages}

@@ -15,6 +15,8 @@ const middlewares_1 = require("../../middlewares");
 // Services
 const services_1 = require("../../services/");
 const models_1 = require("../../models");
+//error response
+const utils_1 = require("../../utils");
 // @desc    Login
 // @route   POST /api/auth/login
 exports.login = (0, middlewares_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,10 +25,10 @@ exports.login = (0, middlewares_1.asyncHandler)((req, res, next) => __awaiter(vo
     // Get user by email and password
     const user = yield models_1.User.findOne({ username }).select("+password");
     if (!user)
-        throw new Error('User not found');
+        return next(new utils_1.ErrorResponse(`username or/ and password are incorrect`, 400));
     const isMatch = yield user.matchPassword(password);
     if (!isMatch)
-        return next('username or password are not correct');
+        return next(new utils_1.ErrorResponse(`username or/ and password are incorrect`, 400));
     const token = user.getSignedJwtToken();
     res.status(200).json({
         success: true,

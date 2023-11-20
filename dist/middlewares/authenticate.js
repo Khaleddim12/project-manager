@@ -16,13 +16,14 @@ exports.authenticate = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const async_1 = require("./async");
 const models_1 = require("../models/");
+const utils_1 = require("../utils");
 exports.authenticate = (0, async_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token = "";
     if (req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer'))
         token = req.headers.authorization.split(' ')[1];
     if (!token)
-        return next("unauthenticated ");
+        return next(new utils_1.ErrorResponse((0, utils_1.errorMessages)("auth", "user"), 401));
     try {
         // Verify token
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
@@ -30,12 +31,12 @@ exports.authenticate = (0, async_1.asyncHandler)((req, res, next) => __awaiter(v
         if (typeof decoded !== "string") {
             user = yield models_1.User.findById(decoded.id);
             if (!user)
-                return next("unauthenticated");
+                return next(new utils_1.ErrorResponse((0, utils_1.errorMessages)("auth", "user"), 401));
             req.user = user;
             next();
         }
     }
     catch (error) {
-        return next("unauthenticated");
+        return next(new utils_1.ErrorResponse((0, utils_1.errorMessages)("auth", "user"), 401));
     }
 }));

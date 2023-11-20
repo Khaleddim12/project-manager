@@ -12,6 +12,9 @@ import {router} from './routes'
 // PATH
 import path from "path";
 
+//Error Handler
+import {error} from './middlewares'
+
 const app = express();
 
 // Server
@@ -31,6 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/api", router);
+
+//use error handler
+app.use(error);
 
 // Listen
 const PORT = process.env.PORT || 5000;

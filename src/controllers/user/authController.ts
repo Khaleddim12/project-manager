@@ -12,7 +12,7 @@ import { User } from "../../models";
 import { IResponse } from "../../interfaces";
 
 //error response
-import {ErrorResponse} from '../../utils'
+import {ErrorResponse, errorMessages} from '../../utils'
 
 
 // @desc    Login
@@ -25,15 +25,12 @@ export const login = asyncHandler(
         // Get user by email and password
         const user = await User.findOne({ username }).select("+password");
         if (!user)
-            throw new Error('User not found');
+            return next(new ErrorResponse(`username or/ and password are incorrect`, 400))
 
         const isMatch = await user.matchPassword(password);
 
         if (!isMatch)
-            return next(
-                'username or password are not correct'
-
-            );
+            return next(new ErrorResponse(`username or/ and password are incorrect`, 400))
 
         const token = user.getSignedJwtToken();
 
