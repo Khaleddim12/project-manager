@@ -30,6 +30,6 @@ const sendEmail = (options, resetLink) => __awaiter(void 0, void 0, void 0, func
         text: `Click the following link to reset your password: ${resetLink}`,
     };
     const info = yield transport.sendMail(message);
-    console.log("Message sent: %s", info.messageId);
+    console.log("Email sent: %s", info.messageId);
 });
 exports.default = sendEmail;

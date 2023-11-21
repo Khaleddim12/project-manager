@@ -20,7 +20,7 @@ const sendEmail = async (options: any, resetLink: string) => {
 
     const info = await transport.sendMail(message);
 
-    console.log("Message sent: %s", info.messageId);
+    console.log("Email sent: %s", info.messageId);
 };
 
 export default  sendEmail 
