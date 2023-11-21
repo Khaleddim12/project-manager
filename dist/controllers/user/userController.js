@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLoggedInUser = exports.deleteUserBySlug = exports.getProfile = exports.editUser = exports.getBySlug = exports.getUsers = void 0;
+exports.logout = exports.deleteLoggedInUser = exports.deleteUserBySlug = exports.getProfile = exports.editUser = exports.getBySlug = exports.getUsers = void 0;
 // Middleware
 const middlewares_1 = require("../../middlewares");
 //services
@@ -118,5 +118,15 @@ exports.deleteLoggedInUser = (0, middlewares_1.asyncHandler)((req, res, next) =>
     res.status(200).json({
         success: true,
         message: "user deleted successfuly",
+    });
+}));
+exports.logout = (0, middlewares_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res.cookie('token', 'none', {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+    res.status(200).json({
+        success: true,
+        message: "user logged out"
     });
 }));

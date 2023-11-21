@@ -10,6 +10,7 @@ exports.userRouter = userRouter;
 userRouter.route("/").get(controllers_1.getUsers);
 userRouter.route("/").delete(controllers_1.deleteLoggedInUser);
 userRouter.route("/profile").get(controllers_1.getProfile);
+userRouter.route("/logout").post(controllers_1.logout);
 userRouter
     .route("/:slug")
     .get(controllers_1.getBySlug)

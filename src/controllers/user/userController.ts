@@ -157,3 +157,19 @@ export const deleteLoggedInUser = asyncHandler(
         });
     }
 );
+
+export const logout  = asyncHandler(
+    async (req: IAuthRequest, res: Response, next: NextFunction) => {
+
+        res.cookie('token', 'none', {
+            expires: new Date(Date.now()),
+            httpOnly: true
+        });
+        
+        res.status(200).json({
+            success: true,
+            message: "user logged out"
+        })
+    
+    }
+);

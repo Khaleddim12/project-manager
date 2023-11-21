@@ -31,27 +31,6 @@ const UserSchema = new Schema<IUser>({
     versionKey: false,
 });
 
-UserSchema.path('username').validate(async function (value: string) {
-    let count: number = await mongoose.models["User"].findOne({ "username": value }).countDocuments();
-
-    if (count > 0) {
-        return false
-    }
-    else {
-        return true
-    }
-}, 'A user with same user name already exists');
-
-UserSchema.path('email').validate(async function (value: string) {
-    let count: number = await mongoose.models["User"].findOne({ "email": value }).countDocuments();
-
-    if (count > 0) {
-        return false
-    }
-    else {
-        return true
-    }
-}, 'A user with same email already exists');
 
 // Hash the password before saving to the database
 UserSchema.pre('save', async function (next) {
