@@ -1,3 +1,3 @@
-import {login, register, deleteLoggedInUser, deleteUserBySlug, editUser, getBySlug, getProfile, getUsers} from './user'
+import {login, register, deleteLoggedInUser, deleteUserBySlug, editUser, getBySlug, getProfile, getUsers, forgotPassword, resetPassword} from './user'
 
-export {login, register, deleteLoggedInUser, deleteUserBySlug, editUser, getBySlug, getProfile, getUsers}
+export {login, register, deleteLoggedInUser, deleteUserBySlug, editUser, getBySlug, getProfile, getUsers, forgotPassword, resetPassword}

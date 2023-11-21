@@ -8,7 +8,7 @@ import { asyncHandler } from "../../middlewares";
 import { getUserBySlug, deleteUser } from "../../services";
 
 //utils
-import { errorMessages, ErrorResponse } from "../../utils";
+import { errorMessages, ErrorResponse, sendEmail } from "../../utils";
 
 //interfaces
 

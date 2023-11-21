@@ -9,10 +9,12 @@ import { createUser, findUserByCreds } from "../../services/";
 // Utils
 import { IUser } from "../../interfaces/userInterface";
 import { User } from "../../models";
-import { IResponse } from "../../interfaces";
+import { IAuthRequest, IResponse } from "../../interfaces";
 
 //error response
-import {ErrorResponse, errorMessages} from '../../utils'
+import { ErrorResponse, errorMessages, sendEmail } from '../../utils'
+
+import crypto from "crypto";
 
 
 // @desc    Login
@@ -53,5 +55,83 @@ export const register = asyncHandler(
         res.status(201).json({
             success: true,
         } as IResponse);
+    }
+);
+
+
+
+// @desc    Forget Password
+// @route   POST /api/user/forgotpassword
+export const forgotPassword = asyncHandler(
+    async (req: IAuthRequest, res: Response, next: NextFunction) => {
+
+        //get user by mail
+        const user = await User.findOne({
+            "email": req.body.email,
+        });
+
+        if (!user)
+            return next(new ErrorResponse(errorMessages("exist", "email"), 404));
+
+        // get resetToken
+        const resetToken = user.getResetPasswordToken();
+
+        // Save hashed token
+        await user.save({ validateBeforeSave: false });
+        const resetLink = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
+
+        try {
+            // Send an email with a reset like to the user
+            await sendEmail({
+                email: user.email,
+                subject: "Password reset token",
+            }, resetLink);
+        } catch (error) {
+            console.log(`error ${error} `);
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+
+            await user.save({ validateBeforeSave: false });
+
+            return next(new ErrorResponse("Email could not be sent", 500));
+        }
+        res.status(200).json({
+            success: true,
+            message: "email sent successfuly",
+        });
+    }
+);
+
+
+export const resetPassword = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const password = req.body.password;
+
+        const resetPasswordToken = crypto
+            .createHash("sha256")
+            .update(req.params.token)
+            .digest("hex");
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return next(new ErrorResponse("Invalid token", 400));
+        }
+
+        // Set new password
+        user.password = password;
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false });
+
+        res.status(200).json({
+            success: true,
+            message: "Password Is Reset",
+        });
     }
 );

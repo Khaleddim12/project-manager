@@ -3,7 +3,7 @@ import { IUser } from '../interfaces'
 import bcrypt from "bcrypt";
 import slugify from "slugify";
 import jwt from "jsonwebtoken";
-
+import crypto from "crypto";
 const UserSchema = new Schema<IUser>({
     username: String,
     slug: String,
@@ -76,9 +76,25 @@ UserSchema.methods.getSignedJwtToken = function () {
 };
 
 //compare entered password against password hash
-UserSchema.methods.matchPassword = async function(enteredPassword: string) {
+UserSchema.methods.matchPassword = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
-}
+};
+
+UserSchema.methods.getResetPasswordToken = function () {
+    // Generate token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    // Hash token and set to reset password token field
+    this.resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+    this.resetPasswordExpire = Date.now() + 3600000;
+
+    return resetToken;
+};
+
 
 const User = model<IUser>("User", UserSchema);
-export {User,UserSchema};
+export { User, UserSchema };

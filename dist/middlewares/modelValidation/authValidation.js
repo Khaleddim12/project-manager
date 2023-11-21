@@ -48,6 +48,19 @@ const authValidate = (validationCase) => {
                     .notEmpty().withMessage((0, utils_1.errorMessages)("required", "password"))
                     .isLength({ min: 5 }).withMessage((0, utils_1.errorMessages)("minLength", "password", "5")),
             ];
+        case "forgot":
+            return [
+                (0, express_validator_1.body)("email").notEmpty().withMessage((0, utils_1.errorMessages)("required", "email"))
+                    .isEmail().withMessage((0, utils_1.errorMessages)("email", "email"))
+            ];
+        case "reset":
+            return [
+                (0, express_validator_1.body)('password')
+                    .notEmpty().withMessage((0, utils_1.errorMessages)("required", "password"))
+                    .isLength({ min: 5 }).withMessage((0, utils_1.errorMessages)("minLength", "password", "5")),
+            ];
+        default:
+            return [];
     }
 };
 exports.authValidate = authValidate;

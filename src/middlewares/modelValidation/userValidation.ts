@@ -34,5 +34,8 @@ export const userValidate = (validationCase: "edit") => {
                     .notEmpty().withMessage(errorMessages("required", "password"))
                     .isLength({ min: 5 }).withMessage(errorMessages("minLength", "password", "5")),
             ];
+        
+        default:
+            return [];
     }
 }

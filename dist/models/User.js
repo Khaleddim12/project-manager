@@ -40,6 +40,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const slugify_1 = __importDefault(require("slugify"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const crypto_1 = __importDefault(require("crypto"));
 const UserSchema = new mongoose_1.Schema({
     username: String,
     slug: String,
@@ -112,6 +113,17 @@ UserSchema.methods.matchPassword = function (enteredPassword) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcrypt_1.default.compare(enteredPassword, this.password);
     });
+};
+UserSchema.methods.getResetPasswordToken = function () {
+    // Generate token
+    const resetToken = crypto_1.default.randomBytes(20).toString("hex");
+    // Hash token and set to reset password token field
+    this.resetPasswordToken = crypto_1.default
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+    this.resetPasswordExpire = Date.now() + 3600000;
+    return resetToken;
 };
 const User = (0, mongoose_1.model)("User", UserSchema);
 exports.User = User;
